@@ -15,7 +15,7 @@
 // DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////////////////
-var defaultUrn = '<replace with your encoded urn>';
+var defaultUrn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDE2LTA1LTEwLTE2LTI3LTM0LXB3NXZqYXNscWZyamhja21ua29pcXBreW10cTcvVjhfRW5naW5lLmYzZA==';
 
 $(document).ready(function () {
     var tokenurl = 'http://' + window.location.host + '/api/token';
@@ -43,11 +43,21 @@ $(document).ready(function () {
                 $('#viewerDiv')[0],
                 viewerConfig);
 
+            viewer.addEventListener(
+                Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+                function(event) {
+                  loadExtensions(viewer);
+              });
+
             viewer.load(pathInfoCollection.path3d[0].path);
         },
         onError);
 
 });
+
+function loadExtensions(viewer) {
+    viewer.loadExtension('Viewing.Extension.Workshop');
+  }
 
 function onError(error) {
     console.log('Error: ' + error);
@@ -63,15 +73,7 @@ function onError(error) {
 //                xhr.send(null);
 //                return xhr.responseText;
 //            }
-
-//              // Allows different urn to be passed as url parameter
-//              var paramUrn = Autodesk.Viewing.Private.getParameterByName('urn');
-//              var urn = (paramUrn !== '' ? paramUrn : defaultUrn);
-//    
 //
-//              if (urn.indexOf('urn:') !== 0)
-//                  urn = 'urn:' + urn;
-                  
 //            function initializeViewer(containerId, documentId, role) {
 //                var viewerContainer = document.getElementById(containerId);
 //                var viewer = new Autodesk.Viewing.Private.GuiViewer3D(
